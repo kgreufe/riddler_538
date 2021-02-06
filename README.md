@@ -1,2 +1,2 @@
-# riddler_538
-puzzles solutions for riddlers from 538.com
+# 538's The Riddler Solutions
+Puzzle solutions for riddler puzzles from 538.com
