@@ -11,6 +11,20 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 ```
 
+## SESSION INFO
+
+Solved with tidyverse with the following versions:
+
+tidyverse_1.3.0
+forcats_0.5.1   
+stringr_1.4.0   
+dplyr_1.0.4     
+purrr_0.3.4    
+readr_1.4.0     
+tidyr_1.1.2     
+tibble_3.0.6    
+ggplot2_3.3.3  
+
 ## NARRATIVE
 
 By all accounts, Riddler Nation had a lot of fun hunting for the mysterious numbers a few weeks back. So here’s what we’re going to do: For the next four weeks, the Riddler Express will feature a similar puzzle that combines multiplication and logic. We’ll be calling these CrossProducts.
