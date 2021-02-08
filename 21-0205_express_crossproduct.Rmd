@@ -108,7 +108,19 @@ mutate(answer, p = str_c(a, b, c)) %>%
   pull(p) %>% 
   str_c(collapse = ", ") #%>% writeClipboard()
 
-
-
 ```
+
+## ANSWER
+
+# A tibble: 6 x 4
+      a     b     c     p
+  <dbl> <dbl> <dbl> <int>
+1     3     9     5   135
+2     5     9     1    45
+3     8     1     8    64
+4     5     7     8   280
+5     5     7     2    70
+6  3000  3969   640    NA
+
+Numbers -- [1] "395, 591, 818, 578, 572"
 
