@@ -1,0 +1,150 @@
+---
+title: ''
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(tictoc)
+
+# sessionInfo()
+
+```
+
+## SESSION INFO
+
+Solved with tidyverse with the following versions:
+
+tidyverse_1.3.0
+forcats_0.5.1   
+stringr_1.4.0   
+dplyr_1.0.4     
+purrr_0.3.4    
+readr_1.4.0     
+tidyr_1.1.2     
+tibble_3.0.6    
+ggplot2_3.3.3  
+
+## NARRATIVE
+
+It’s the second week in our four weeks of CrossProduct™ puzzles!
+
+This time around, there are six three-digit numbers — each belongs in a row of the table below, with one digit per cell. The products of the three digits of each number are shown in the rightmost column. Meanwhile, the products of the digits in the hundreds, tens and ones places, respectively, are shown in the bottom row.
+
+`______| ______| _____| 210`
+`______| ______| _____| 144`
+`______| ______| _____|  54`
+`______| ______| _____| 135`
+`______| ______| _____|   4`
+`______| ______| _____|  49`
+` 6,615| 15,552|	 420|`
+
+
+Can you find all six three-digit numbers and complete the table?
+
+## SOLUTION
+
+
+```{r}
+tictoc::tic()
+
+row_products <- c(210, 144, 54, 135, 4, 49)
+
+col_products <- c(6615, 15552, 420)
+
+pos_rows <- 
+  crossing(a = 1:9, 
+           b = 1:9, 
+           c = 1:9) %>% 
+  mutate(p = a * b * c) %>% 
+  filter(p %in% row_products) %>% 
+  split(.$p)
+
+
+
+for (a in 1:nrow(pos_rows$`4`)) {
+  for (b in 1:nrow(pos_rows$`49`)) {
+    for (c in 1:nrow(pos_rows$`54`)) {
+      for (d in 1:nrow(pos_rows$`135`)) {
+        for (e in 1:nrow(pos_rows$`144`)) {
+          for (f in 1:nrow(pos_rows$`210`)) {
+            
+            print(str_c(a, b, c, d, e, f, sep = "."))
+            
+            mult <- 
+              bind_rows(
+                pos_rows$`4`[a, ],
+                pos_rows$`49`[b, ],
+                pos_rows$`54`[c, ],
+                pos_rows$`135`[d, ],
+                pos_rows$`144`[e, ], 
+                pos_rows$`210`[f, ]) 
+            
+            test_col <- 
+              mult %>% 
+              select(-p) %>% 
+              summarize(across(.fns = prod)) %>%
+              as.matrix() %>% 
+              as.vector() %>% 
+              identical(., col_products)
+            
+            if (test_col) {
+              
+              answer <- mult
+              break
+              
+            }
+            
+          }
+          
+          if (test_col) break
+        }
+        if (test_col) break
+      }
+      if (test_col) break
+    }
+    if (test_col) break
+  }
+  if (test_col) break
+}
+
+# re-order answer to match input
+answer <- 
+  answer[match(row_products, answer$p), ]
+
+# rebuild the table to match the prompt
+#   for visual verification
+bind_rows(
+  answer, 
+  summarize(select(answer, -p), across(.fns = prod))
+)
+
+# write to clipboard for riddler answer form
+mutate(answer, p = str_c(a, b, c)) %>% 
+  pull(p) %>% 
+  str_c(collapse = ", ") #%>% writeClipboard()
+
+
+tictoc::toc()
+```
+
+## ANSWER
+
+Brute force, as expected, is inefficient time-wise. It took a little over 10 minutes on my computer.
+
+`A tibble: 7 x 4`
+`      a     b     c     p`
+  `<dbl> <dbl> <dbl> <int>`
+`1     7     6     5   210`
+`2     9     8     2   144`
+`3     3     9     2    54`
+`4     5     9     3   135`
+`5     1     4     1     4`
+`6     7     1     7    49`
+`7  6615 15552   420    NA`
+
+Numbers -- "765, 982, 392, 593, 141, 717"
